@@ -17,6 +17,11 @@ class UserController extends AbstractController
     #[Route('/inscription', name: 'register', methods:['GET', 'POST'])]
     public function register(Request $request, UserRepository $repository, UserPasswordHasherInterface $passwordHasher): Response
     {
+        if($this->getUser()) {
+            $this->addFlash('warning',"Vous etes connecté, inscription non autorisée. <a href='/logout'>Déconnexion</a>");
+            return $this->redirectToRoute('show_home');
+
+        }
 
         $user = new User();
 
@@ -36,7 +41,7 @@ class UserController extends AbstractController
             $repository->save($user, true);
 
             $this->addFlash('succes',"Votre inscription a été correctement enregistrée.");
-            return $this->redirectToRoute('show_home');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('user/register_form.html.twig', [
