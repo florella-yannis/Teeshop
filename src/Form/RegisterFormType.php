@@ -34,7 +34,7 @@ class RegisterFormType extends AbstractType
                 'choices' => [
                     'Homme' => 'homme',
                     'Femme' => 'femme',
-                    'Apache' => 'apache'
+                    'Non-binaire' => 'non-binaire'
                 ],
                 'expanded' => true,
                 'label_attr' => [
