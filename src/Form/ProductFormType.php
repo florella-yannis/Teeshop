@@ -52,7 +52,7 @@ class ProductFormType extends AbstractType
                 'label' =>'Prix du produit'
             ])
             ->add('stock', TextType::class,[
-                'label' =>'Titre du produit'
+                'label' =>'Stock du produit'
             ])
             ->add('submit', SubmitType::class,[
                 'label' => 'Ajouter',
