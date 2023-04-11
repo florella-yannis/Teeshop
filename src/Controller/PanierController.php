@@ -2,86 +2,85 @@
 
 namespace App\Controller;
 
-use DateTime;
 use App\Entity\Command;
 use App\Entity\Product;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/panier')]
 class PanierController extends AbstractController
 {
-    
-    #[Route('/voir-mon-panier', name: "show_panier", methods:['GET'])]
+    # Créer l'action qui va rendre la vue 'panier/show_panier.html.twig'
+    #[Route('/voir-mon-panier', name: 'show_panier', methods: ['GET'])]
     public function showPanier(SessionInterface $session): Response
     {
-        // cette instruction permet de recuperer le panier en session et a défaut de créé le panier s'il n'existe pas
+        # Cette instruction permet de récupérer le panier en session, et à défaut créer le panier s'il n'existe pas.
         $panier = $session->get('panier', []);
         $total = 0;
 
-        //exo faire le code qui permet de calculer le total par produit et le total du panier
+        # EXERCICE : Faire le code qui permet de calculer le total par produit ET le total du panier.
         foreach($panier as $item) {
 
-            $totalItem = $item['product']->getprice() * $item['quantity'];
+            $totalItem = $item['product']->getPrice() * $item['quantity'];
             $total += $totalItem;
         }
 
-        return $this->render('panier/show_panier.html.twig', [
-            'total' => $total
-        ]);
-    }
+         return $this->render('panier/show_panier.html.twig', [
+             'total' => $total
+         ]);
+    }// end function showPanier()
 
-    #[Route('/ajouter-un-produit/{id}', name:'add_item', methods:['GET'])]
+    #[Route('/ajouter-un-produit/{id}', name: 'add_item', methods: ['GET'])]
     public function addItem(Product $product, SessionInterface $session): Response
     {
-        #si dans la session le panier n'existe pas, la methode get() retournera le second parametre : un array
-        $panier = $session->get('panier',[]);
+        # Si dans la session le panier n'existe pas, la méthode get() retournera le second paramètre : un array vide
+        $panier = $session->get('panier', []);
 
-        if(empty($panier[$product->getId()])){
+        if(empty($panier[$product->getId()])) {
             $panier[$product->getId()]['quantity'] = 1;
             $panier[$product->getId()]['product'] = $product;
-
         } else {
-            //post incrementation : quantity + 1
-            //pre incrementation : 1 + quantity
+            // post-incrementation : quantity + 1
+            // pre-incrementation : 1 + quantity
             ++$panier[$product->getId()]['quantity'];
         }
 
-        //ici nous devons set() le panier en session, en lui passant $panier[]
+        # Ici, nous devons set() le panier en session, en lui passant $panier[]
         $session->set('panier', $panier);
 
         $this->addFlash('success', "Le produit a bien été ajouté à votre panier !");
-
         return $this->redirectToRoute('show_home');
-    }
+    } // end function addItem()
 
-    #[Route('/vider-le-panier', name:'delete_panier', methods:['GET'])]
-    public function deletePanier(SessionInterface $session)
+
+    #[Route('/vider-le-panier', name: 'delete_panier', methods: ['GET'])]
+    public function deletePanier(SessionInterface $session): Response
     {
         $session->remove('panier');
 
-        $this->addFlash('sucess', "Votre panier est à nouveau vide.");
+        $this->addFlash('success', "Votre panier est à nouveau vide.");
         return $this->redirectToRoute('show_home');
-
     }
 
-    #[Route('/retirer-du-panier/{id}', name:'delete_item', methods:['GET'])]
-    public function deleteItem(int $id, SessionInterface $session):Response
+    #Exercice : créer l'action qui permet de supprimer un seul item du panier :
+    #[Route('/retirer-du-panier/{id}', name: 'delete_item', methods: ['GET'])]
+    public function deleteItem(int $id, SessionInterface $session): Response
     {
         $panier = $session->get('panier');
 
-            // array_key_exists() est une fonction native de PHP, qui permet de vérifier si une key existe dans un array.
-        if(array_key_exists($id, $panier)){
-            unset($panier[$id]); # unset() permet de supp une variable (ou une clé dans un array)
+        # array_key_exists() permet de vérifier si une key existe dans un array.
+        if(array_key_exists($id, $panier)) {
+            unset($panier[$id]); # unset() permet de supprimer une variable (ou une clé dans un array)
         }
+
         $session->set('panier', $panier);
         return $this->redirectToRoute('show_panier');
-    }
-    
+    } // end function deleteItem()
+
     #[Route('/valider-mon-panier', name: 'validate_commande', methods: ['GET'])]
     public function validateCommande(SessionInterface $session, EntityManagerInterface $entityManager): Response
     {
@@ -105,7 +104,7 @@ class PanierController extends AbstractController
             $total += $totalItem;
 
             $commande->setQuantity($item['quantity']);
-//            $product = $item['produit'];
+//            $product = $item['product'];
         }
 
 //        $commande->setProduct($product);
@@ -125,4 +124,4 @@ class PanierController extends AbstractController
 
     }// end function validate()
 
-}
+} // end class
