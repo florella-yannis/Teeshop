@@ -22,66 +22,74 @@
 					<button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Commandes</button>
 				</li>
 
-                <li class="nav-item ms-auto" role="presentation">
-                    <a class="btn btn-success" href="{{ path('create_product') }}"><i class="bi bi-plus-circle"></i> Ajouter un produit</a>
-                </li>
+				<li class="nav-item ms-auto" role="presentation">
+					<a class="btn btn-success" href="{{ path('create_product') }}">
+						<i class="bi bi-plus-circle"></i>
+						Ajouter un produit</a>
+				</li>
 			</ul>
 			<div class="tab-content" id="pills-tabContent">
-                {# /////////////////////////// Table produits /////////////////////////////////#}
+				{# /////////////////////////// Table produits /////////////////////////////////#}
 				<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                
-                    <table class="table">
-                        <thead>
-                            <tr class="text-center">
-                                <th>#</th>
-                                <th>Titre</th>
-                                <th>Description</th>
-                                <th>Couleur</th>
-                                <th>Taille</th>
-                                <th>Collection</th>
-                                <th>Photo</th>
-                                <th>Prix</th>
-                                <th>Stock</th>
-                                <th>Créé le</th>
-                                <th>Modifié le</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for product in products %}
-                                <tr class="text-center align-middle">
-                                    <td>{{product.id}}</td>
-                                    <td>{{product.title | capitalize}}</td>
-                                    <td>{{product.description | length > 25 ? product.description | slice(0,25) ~ '...' : product.description }}</td>
-                                    <td>{{product.color}}</td>
-                                    <td>{{product.size | upper}}</td>
-                                    <td>{{product.Collection | capitalize}}</td>
-                                    <td> <img src="{{ asset('uploads/'~ product.photo) }}" alt="{{product.title}}" height="150" witdh="150" class="img-custom"></td>
-                                    <td>{{product.price}} €</td>
-                                    <td>{{product.stock}}</td>
-                                    <td>{{product.createdAt | date('d/m/Y')}}</td>
-                                    <td>{{product.updatedAt | date('d/m/Y')}}</td>
-                                    <td>
-                                        <a href="{{ path('update_product', {'id': product.id}) }}" class="btn btn-info" title="Modifier le produit"><i class="bi bi-pencil-square"></i></a>
-                                        <a href="{{ path('soft_delete_product', {'id': product.id}) }}" class="btn btn-danger" title="Archiver le produit" onclick="return confirm('Cette action archivera le produit. Voulez-vous continuer ?')"><i class="bi bi-trash3"></i></a>
-        
-                                    </td>
 
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                
-                </div>
-                {# /////////////////////////// Table produits /////////////////////////////////#}
+					<table class="table">
+						<thead>
+							<tr class="text-center">
+								<th>#</th>
+								<th>Titre</th>
+								<th>Description</th>
+								<th>Couleur</th>
+								<th>Taille</th>
+								<th>Collection</th>
+								<th>Photo</th>
+								<th>Prix</th>
+								<th>Stock</th>
+								<th>Créé le</th>
+								<th>Modifié le</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for product in products %}
+								<tr class="text-center align-middle">
+									<td>{{product.id}}</td>
+									<td>{{product.title | capitalize}}</td>
+									<td>{{product.description | length > 25 ? product.description | slice(0,25) ~ '...' : product.description }}</td>
+									<td>{{product.color}}</td>
+									<td>{{product.size | upper}}</td>
+									<td>{{product.Collection | capitalize}}</td>
+									<td>
+										<img src="{{ asset('uploads/'~ product.photo) }}" alt="{{product.title}}" height="150" witdh="150" class="img-custom"></td>
+									<td>{{product.price}}
+										€</td>
+									<td>{{product.stock}}</td>
+									<td>{{product.createdAt | date('d/m/Y')}}</td>
+									<td>{{product.updatedAt | date('d/m/Y')}}</td>
+									<td>
+										<a href="{{ path('update_product', {'id': product.id}) }}" class="btn btn-info" title="Modifier le produit">
+											<i class="bi bi-pencil-square"></i>
+										</a>
+										<a href="{{ path('soft_delete_product', {'id': product.id}) }}" class="btn btn-danger" title="Archiver le produit" onclick="return confirm('Cette action archivera le produit. Voulez-vous continuer ?')">
+											<i class="bi bi-trash3"></i>
+										</a>
 
-                {# /////////////////////////// Table membres /////////////////////////////////#}
+									</td>
+
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+
+				</div>
+				{# /////////////////////////// Table produits /////////////////////////////////#}
+
+				{# /////////////////////////// Table membres /////////////////////////////////#}
 				<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">Users</div>
-                {# /////////////////////////// Table membres /////////////////////////////////#}
+				{# /////////////////////////// Table membres /////////////////////////////////#}
 
-                {# /////////////////////////// Table Commandes /////////////////////////////////#}
+				{# /////////////////////////// Table Commandes /////////////////////////////////#}
 				<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">Commandes</div>
-                {# /////////////////////////// Table Commandes /////////////////////////////////#}
+				{# /////////////////////////// Table Commandes /////////////////////////////////#}
 
 			</div>
 
